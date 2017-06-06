@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "dev": "NODE_ENV=development supervisor -w routes,views,app.js -e js,pug app"
+    "dev": "NODE_ENV=development supervisor -w modules,routes,views,app.js -e js,pug app"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,10 @@
   "dependencies": {
     "express": "^4.15.3",
     "jquery": "^3.2.1",
+    "ol": "^4.1.1",
     "pug": "^2.0.0-rc.1",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
     "uikit": "^3.0.0-beta.24"
   },
   "devDependencies": {
