@@ -3,6 +3,7 @@
  */
 var express = require("express");
 var Map = require("../modules/map");
+var StreetView = require("../modules/street-view");
 
 var router = express.Router();
 
@@ -32,6 +33,26 @@ router.get("/osm/:id", (req, res) => {
         res.json(Object.assign(resp, {
             vectorLayers: vectorLayers
         }));
+    }).catch(err => {
+        Object.assign(resp, { success: false });
+        res.json(Object.assign(resp, err));
+    });
+});
+router.get("/street-views", (req, res) => {
+    var streetView = new StreetView();
+    var resp = {};
+    streetView.list().then(result => {
+        Object.assign(resp, { success: true });
+        var list = [];
+        for (var i in result) {
+            list.push({
+                id: result[i]["id"],
+                name: result[i]["name"]
+            });
+        }
+        res.json(Object.assign(resp, {
+            views: list
+        }))
     }).catch(err => {
         Object.assign(resp, { success: false });
         res.json(Object.assign(resp, err));

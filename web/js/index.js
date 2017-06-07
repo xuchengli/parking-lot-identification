@@ -8,12 +8,14 @@ import $ from "jquery";
 import UIkit from "uikit";
 import Icons from "uikit/dist/js/uikit-icons";
 import Osm from "./osm";
+import StreetViewList from "./street-view-list";
 
 UIkit.use(Icons);
 
 var osm = new Osm();
+var streetViewList = new StreetViewList();
 osm.on(Osm.events.SHOW_STREET_VIEW, cameraId => {
-    console.log(cameraId);
+    streetViewList.show(cameraId);
 });
 osm.on(Osm.events.SELECT_PARKING_LOT, feature => {
     console.log(feature.get("metadata"));

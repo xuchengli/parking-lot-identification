@@ -1,0 +1,15 @@
+div(uk-modal)
+    .uk-modal-dialog.uk-modal-body
+        h2.uk-modal-title Street View List
+        button.uk-modal-close-default(type="button" uk-close)
+        table.uk-table.uk-table-hover.uk-table-divider
+            thead
+                tr
+                    th Name
+                    th Action
+            tbody
+                each view in views
+                    tr
+                        td= view.name
+                        td
+                            button.uk-button.uk-button-primary.uk-button-small(data-id=view.id) Open

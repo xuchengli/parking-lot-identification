@@ -19,6 +19,7 @@
     "jquery": "^3.2.1",
     "ol": "^4.1.1",
     "pug": "^2.0.0-rc.1",
+    "pug-loader": "^2.3.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "uikit": "^3.0.0-beta.24"
