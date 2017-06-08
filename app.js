@@ -3,12 +3,19 @@
  */
 var express = require("express");
 var path = require("path");
+var bodyParser = require("body-parser");
+var mongoose = require("mongoose");
+var config = require("./modules/configuration");
 var app = express();
 var env = process.env.NODE_ENV || "production";
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.locals.env = env;
+
+mongoose.connect(config.mongodb.uri);
 
 if (env == "development") {
     var webpack = require("webpack");
