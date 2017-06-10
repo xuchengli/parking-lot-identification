@@ -15,24 +15,43 @@ router.get("/osm/:id", (req, res) => {
         Object.assign(resp, { success: true });
         var layers = result.layers;
         var vectorLayers = [];
-        for (var i in layers) {
-            if (layers[i]["class"] == "WMS") {
+        for (let layer of layers) {
+            if (layer["class"] == "WMS") {
                 Object.assign(resp, {
                     tileLayer: {
-                        name: layers[i]["name"],
-                        center: layers[i]["properties"]["center"],
-                        zoom: layers[i]["properties"]["zoom"]
+                        name: layer["name"],
+                        center: layer["properties"]["center"],
+                        zoom: layer["properties"]["zoom"]
                     }
                 });
-            } else if (layers[i]["class"] == "VECTOR") {
+            } else if (layer["class"] == "VECTOR") {
                 vectorLayers.push({
-                    name: layers[i]["name"],
-                    featureCollection: layers[i]["featureCollection"]
+                    name: layer["name"],
+                    featureCollection: layer["featureCollection"]
                 });
             }
         }
+        Object.assign(resp, { vectorLayers: vectorLayers });
+        var identification = new Identification();
+        return identification.findAll();
+    }).then(result => {
+        var identification = {};
+        for (let i of result) {
+            identification[i["camera"]] = i["street_view"];
+            var parkingLots = i["parking_lots"];
+            for (let p of parkingLots) {
+                identification[p["_map"]] = {
+                    no: p["no"],
+                    camera: i["camera"],
+                    street_view: {
+                        id: i["street_view"],
+                        parking_lot: p["_street_view"]
+                    }
+                }
+            }
+        }
         res.json(Object.assign(resp, {
-            vectorLayers: vectorLayers
+            identification: identification
         }));
     }).catch(err => {
         Object.assign(resp, { success: false });

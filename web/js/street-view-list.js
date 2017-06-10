@@ -3,6 +3,7 @@
  */
 import $ from "jquery";
 import UIkit from "uikit";
+import StreetView from "./street-view";
 import template from "../templates/street-view-list-modal.pug";
 
 class streetViewList {
@@ -17,26 +18,9 @@ class streetViewList {
                         views: data.views
                     }));
                     dialog.$el.on("click", "button", e => {
-                        $.ajax({
-                            type: "POST",
-                            url: "/api/street-view/open",
-                            data: {
-                                camera: cameraId,
-                                street_view: $(e.target).data("id")
-                            },
-                            dataType: "json",
-                            success: data => {
-                                if (data.success) {
-                                    console.log(data);
-                                    dialog.hide();
-                                } else {
-                                    UIkit.notification("<span uk-icon='icon: close'></span> " + data.message, "danger");
-                                }
-                            },
-                            error: (XMLHttpRequest, textStatus, errorThrown) => {
-                                UIkit.notification("<span uk-icon='icon: close'></span> " + errorThrown, "danger");
-                            }
-                        });
+                        var streetView = new StreetView();
+                        streetView.load(cameraId, $(e.target).data("id"));
+                        dialog.hide();
                     }).on("hidden", e => {
                         if (e.target === e.currentTarget) {
                             dialog.$destroy(true);

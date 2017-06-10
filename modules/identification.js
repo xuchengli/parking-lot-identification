@@ -36,5 +36,13 @@ class identification {
             });
         });
     }
+    findAll() {
+        return new Promise((resolve, reject) => {
+            Identification.find({}, (err, identifications) => {
+                if (err) reject(err);
+                resolve(identifications);
+            });
+        });
+    }
 }
 module.exports = identification;

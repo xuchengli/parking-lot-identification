@@ -5,6 +5,7 @@ import $ from "jquery";
 import UIkit from "uikit";
 import Map from "ol/map";
 import View from "ol/view";
+import Zoom from "ol/control/zoom";
 import TileLayer from "ol/layer/tile";
 import VectorLayer from "ol/layer/vector";
 import OSM from "ol/source/osm";
@@ -22,6 +23,17 @@ const events = Object.freeze({
     SELECT_PARKING_LOT: Symbol("selectParkingLot")
 });
 const callback = {};
+function createCameraStyle(src, img) {
+    return new Style({
+        image: new Icon({
+            crossOrigin: "anonymous",
+            src: src,
+            img: img,
+            imgSize: img ? [img.width, img.height] : undefined
+        })
+    });
+}
+var highlightedCameraStyle = {};
 class osm {
     static get events() {
         return events;
@@ -41,8 +53,7 @@ class osm {
                             source: new OSM()
                         })
                     ];
-                    for (var i in data.vectorLayers) {
-                        var layer = data.vectorLayers[i];
+                    for (let layer of data.vectorLayers) {
                         layers.push(new VectorLayer({
                             name: layer.name,
                             source: new VectorSource({
@@ -51,11 +62,33 @@ class osm {
                             style: function(feature, resolution) {
                                 var property = feature.getProperties();
                                 if (feature.getGeometry().getType() == "Point") {
-                                    return new Style({
-                                        image: new Icon({
-                                            src: "http://emap.crl.ibm.com/imd/" + property.icon
-                                        })
-                                    });
+                                    var src = "http://emap.crl.ibm.com/imd/" + property.icon;
+                                    if (data.identification[property.id]) {
+                                        if (highlightedCameraStyle[src]) {
+                                            feature.setStyle(highlightedCameraStyle[src]);
+                                        } else {
+                                            var img = new Image;
+                                            var canvas = $("<canvas>")[0];
+                                            var context = canvas.getContext("2d");
+                                            img.crossOrigin = "Anonymous";
+                                            img.onload = () => {
+                                                canvas.width = img.width;
+                                                canvas.height = img.height;
+                                                context.drawImage(img, 0, 0);
+                                                var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                                                var data = imageData.data;
+                                                for (var i = 0, ii = data.length; i < ii; i = i + 4) {
+                                                    data[i] = 255 - data[i];
+                                                }
+                                                context.putImageData(imageData, 0, 0);
+                                                highlightedCameraStyle[src] = createCameraStyle(undefined, canvas);
+                                                feature.setStyle(highlightedCameraStyle[src]);
+                                            };
+                                            img.src = src;
+                                        }
+                                    } else {
+                                        feature.setStyle(createCameraStyle(src, undefined));
+                                    }
                                 } else {
                                     return new Style({
                                         fill: new Fill({ color: "#F7F5F2" }),
@@ -68,6 +101,7 @@ class osm {
                     var map = new Map({
                         target: "tiledMap",
                         layers: layers,
+                        controls: [new Zoom()],
                         view: new View({
                             projection: "EPSG:4326",
                             center: data.tileLayer.center,
