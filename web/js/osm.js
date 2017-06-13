@@ -15,6 +15,7 @@ import Style from "ol/style/style";
 import Fill from "ol/style/fill";
 import Stroke from "ol/style/stroke";
 import Icon from "ol/style/icon";
+import Text from "ol/style/text";
 import Select from "ol/interaction/select";
 import Condition from "ol/events/condition";
 
@@ -34,6 +35,43 @@ function createCameraStyle(src, img) {
     });
 }
 var highlightedCameraStyle = {};
+function changePixel(img) {
+    var canvas = $("<canvas>")[0];
+    var context = canvas.getContext("2d");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    context.drawImage(img, 0, 0);
+    var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    var data = imageData.data;
+    for (var i = 0, ii = data.length; i < ii; i = i + 4) {
+        data[i] = 255 - data[i];
+    }
+    context.putImageData(imageData, 0, 0);
+    return canvas;
+}
+function _highlightCamera(src, img) {
+    return new Promise((resolve, reject) => {
+        if (highlightedCameraStyle[src]) {
+            resolve(highlightedCameraStyle[src]);
+        } else {
+            if (img) {
+                var canvas = changePixel(img);
+                highlightedCameraStyle[src] = createCameraStyle(undefined, canvas);
+                resolve(highlightedCameraStyle[src]);
+            } else {
+                img = new Image;
+                img.crossOrigin = "Anonymous";
+                img.onload = () => {
+                    var canvas = changePixel(img);
+                    highlightedCameraStyle[src] = createCameraStyle(undefined, canvas);
+                    resolve(highlightedCameraStyle[src]);
+                };
+                img.src = src;
+            }
+        }
+    });
+}
+var map;
 class osm {
     static get events() {
         return events;
@@ -63,42 +101,32 @@ class osm {
                                 var property = feature.getProperties();
                                 if (feature.getGeometry().getType() == "Point") {
                                     var src = "http://emap.crl.ibm.com/imd/" + property.icon;
-                                    if (data.identification[property.id]) {
-                                        if (highlightedCameraStyle[src]) {
-                                            feature.setStyle(highlightedCameraStyle[src]);
-                                        } else {
-                                            var img = new Image;
-                                            var canvas = $("<canvas>")[0];
-                                            var context = canvas.getContext("2d");
-                                            img.crossOrigin = "Anonymous";
-                                            img.onload = () => {
-                                                canvas.width = img.width;
-                                                canvas.height = img.height;
-                                                context.drawImage(img, 0, 0);
-                                                var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                                                var data = imageData.data;
-                                                for (var i = 0, ii = data.length; i < ii; i = i + 4) {
-                                                    data[i] = 255 - data[i];
-                                                }
-                                                context.putImageData(imageData, 0, 0);
-                                                highlightedCameraStyle[src] = createCameraStyle(undefined, canvas);
-                                                feature.setStyle(highlightedCameraStyle[src]);
-                                            };
-                                            img.src = src;
-                                        }
+                                    if (property.identification) {
+                                        _highlightCamera(src).then(style => feature.setStyle(style));
                                     } else {
                                         feature.setStyle(createCameraStyle(src, undefined));
                                     }
                                 } else {
-                                    return new Style({
+                                    var _style = {
                                         fill: new Fill({ color: "#F7F5F2" }),
                                         stroke: new Stroke({ color: "#3399CC" })
-                                    });
+                                    };
+                                    if (property.identification) {
+                                        return new Style(Object.assign(_style, {
+                                            text: new Text({
+                                                text: property.identification.no,
+                                                fill: new Fill({ color: "#847574" }),
+                                                stroke: new Stroke({ color: "#fff", width: 3 })
+                                            })
+                                        }));
+                                    } else {
+                                        return new Style(_style);
+                                    }
                                 }
                             }
                         }));
                     }
-                    var map = new Map({
+                    map = new Map({
                         target: "tiledMap",
                         layers: layers,
                         controls: [new Zoom()],
@@ -129,7 +157,7 @@ class osm {
                         var feature = map.forEachFeatureAtPixel(e.pixel, feature => feature);
                         if (feature && feature.getGeometry().getType() == "Point") {
                             var cb = callback[events.SHOW_STREET_VIEW];
-                            if (cb) cb(feature.getProperties().id);
+                            if (cb) cb(feature);
                         }
                     });
                 } else {
@@ -139,7 +167,26 @@ class osm {
             error: (XMLHttpRequest, textStatus, errorThrown) => {
                 UIkit.notification("<span uk-icon='icon: close'></span> " + errorThrown, "danger");
             }
-        })
+        });
+    }
+    highlightCamera(cameraId, streetViewId) {
+        var camera = null;
+        var layers = map.getLayers().getArray();
+        for (let layer of layers) {
+            if (layer instanceof VectorLayer) {
+                camera = layer.getSource().getFeatureById(cameraId);
+                if (camera) break;
+            }
+        }
+        if (camera) {
+            camera.set("identification", {
+                street_view: {
+                    id: streetViewId
+                }
+            }, true);
+            var image = camera.getStyle().getImage().getImage();
+            _highlightCamera(image.src, image).then(style => camera.setStyle(style));
+        }
     }
 }
 export default osm;

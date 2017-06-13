@@ -3,6 +3,7 @@
  */
 import $ from "jquery";
 import UIkit from "uikit";
+import Osm from "./osm";
 import StreetView from "./street-view";
 import template from "../templates/street-view-list-modal.pug";
 
@@ -17,9 +18,13 @@ class streetViewList {
                     var dialog = UIkit.modal(template({
                         views: data.views
                     }));
-                    dialog.$el.on("click", "button", e => {
+                    dialog.$el.on("click", "tbody button", e => {
                         var streetView = new StreetView();
-                        streetView.load(cameraId, $(e.target).data("id"));
+                        streetView.on(StreetView.events.IDENTIFIED, (cameraId, streetViewId) => {
+                            var osm = new Osm();
+                            osm.highlightCamera(cameraId, streetViewId);
+                        });
+                        streetView.identify(cameraId, $(e.target).data("id"));
                         dialog.hide();
                     }).on("hidden", e => {
                         if (e.target === e.currentTarget) {

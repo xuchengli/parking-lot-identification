@@ -40,7 +40,47 @@ class identification {
         return new Promise((resolve, reject) => {
             Identification.find({}, (err, identifications) => {
                 if (err) reject(err);
-                resolve(identifications);
+                var resp = {};
+                for (let identification of identifications) {
+                    resp[identification["camera"]] = {
+                        street_view: {
+                            id: identification["street_view"]
+                        }
+                    };
+                    var parkingLots = identification["parking_lots"];
+                    for (let p of parkingLots) {
+                        resp[p["_map"]] = {
+                            no: p["no"],
+                            camera: identification["camera"],
+                            street_view: {
+                                id: identification["street_view"],
+                                parking_lot: p["_street_view"]
+                            }
+                        };
+                        resp[p["_street_view"]] = {
+                            no: p["no"],
+                            street_view: identification["street_view"],
+                            osm: {
+                                camera: identification["camera"],
+                                parking_lot: p["_map"]
+                            }
+                        };
+                    }
+                }
+                resolve(resp);
+            });
+        });
+    }
+    findStreetViews() {
+        return new Promise((resolve, reject) => {
+            Identification.aggregate(
+                { $match: {} },
+                { $project: { _id: 0, street_view: 1 } },
+            (err, streetViews) => {
+                if (err) reject(err);
+                resolve(streetViews.map(streetView => {
+                    return streetView.street_view;
+                }));
             });
         });
     }
