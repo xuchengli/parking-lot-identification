@@ -91,31 +91,22 @@ router.get("/street-views", (req, res) => {
         res.json(Object.assign(resp, err));
     });
 });
-router.post("/street-view/identify", (req, res) => {
+router.post("/street-view/:id", (req, res) => {
     var resp = {};
     co(function* () {
-        var identification = new Identification();
-        var identified = yield identification.identifyStreetView(req.body.camera, req.body.street_view);
+        var streetViewId = req.params.id;
+        var cameraId = req.body.camera;
 
-        var map = new Map(identified.street_view);
+        var map = new Map(streetViewId);
         var mapInfo = yield map.getAllFeatures();
 
-        Object.assign(resp, { success: true });
-        res.json(Object.assign(resp, rebuildMap(mapInfo, {})));
-    }).catch(err => {
-        Object.assign(resp, { success: false });
-        res.json(Object.assign(resp, { message: err.message }));
-    });
-});
-router.get("/street-view/:id", (req, res) => {
-    var resp = {};
-    co(function* () {
+        var identifications = {};
         var identification = new Identification();
-        var map = new Map(req.params.id);
-
-        var identifications = yield identification.findAll();
-        var mapInfo = yield map.getAllFeatures();
-
+        if (cameraId) {
+            yield identification.identifyStreetView(cameraId, streetViewId);
+        } else {
+            identifications = yield identification.findAll();
+        }
         Object.assign(resp, { success: true });
         res.json(Object.assign(resp, rebuildMap(mapInfo, identifications)));
     }).catch(err => {

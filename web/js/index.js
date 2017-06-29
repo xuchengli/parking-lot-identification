@@ -1,7 +1,7 @@
 /**
  * Created by lixuc on 2017/6/1.
  */
-import "uikit/dist/css/uikit.min.css";
+import "uikit/dist/css/uikit.css";
 import "ol/ol.css";
 import "../css/style.css";
 import $ from "jquery";
@@ -14,18 +14,18 @@ import StreetView from "./street-view";
 UIkit.use(Icons);
 
 var osm = new Osm();
-var streetViewList = new StreetViewList();
-var streetView = new StreetView();
-osm.on(Osm.events.SHOW_STREET_VIEW, feature => {
+osm.on(osm.events.SHOW_STREET_VIEW, feature => {
     var identification = feature.get("identification");
     if (identification) {
         var streetViewId = identification.street_view.id;
-        streetView.load(streetViewId);
+        var streetView = new StreetView();
+        streetView.open(streetViewId);
     } else {
+        var streetViewList = new StreetViewList();
         streetViewList.show(feature.getId());
     }
 });
-osm.on(Osm.events.SELECT_PARKING_LOT, feature => {
+osm.on(osm.events.SELECT_PARKING_LOT, feature => {
     console.log(feature.get("metadata"));
 });
 osm.load("20f43f02-5bdf-4e51-b5bc-e34dad373bc8");

@@ -20,11 +20,11 @@ class streetViewList {
                     }));
                     dialog.$el.on("click", "tbody button", e => {
                         var streetView = new StreetView();
-                        streetView.on(StreetView.events.IDENTIFIED, (cameraId, streetViewId) => {
+                        streetView.on(streetView.events.OPENED, (cameraId, streetViewId) => {
                             var osm = new Osm();
                             osm.highlightCamera(cameraId, streetViewId);
                         });
-                        streetView.identify(cameraId, $(e.target).data("id"));
+                        streetView.open($(e.target).data("id"), cameraId);
                         dialog.hide();
                     }).on("hidden", e => {
                         if (e.target === e.currentTarget) {

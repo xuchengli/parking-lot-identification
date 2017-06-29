@@ -23,7 +23,6 @@ const events = Object.freeze({
     SHOW_STREET_VIEW: Symbol("showStreetView"),
     SELECT_PARKING_LOT: Symbol("selectParkingLot")
 });
-const callback = {};
 function createCameraStyle(src, img) {
     return new Style({
         image: new Icon({
@@ -73,11 +72,15 @@ function _highlightCamera(src, img) {
 }
 var map;
 class osm {
-    static get events() {
+    constructor() {
+        var _callback = {};
+        this.callback = () => _callback;
+    }
+    get events() {
         return events;
     }
     on(evt, cb) {
-        callback[evt] = cb;
+        this.callback()[evt] = cb;
     }
     load(id) {
         $.ajax({
@@ -143,7 +146,7 @@ class osm {
                     map.addInteraction(select);
                     select.on("select", e => {
                         if (e.selected.length) {
-                            var cb = callback[events.SELECT_PARKING_LOT];
+                            var cb = this.callback()[events.SELECT_PARKING_LOT];
                             if (cb) cb(e.selected[0]);
                         }
                     });
@@ -156,7 +159,7 @@ class osm {
                     map.on("click", e => {
                         var feature = map.forEachFeatureAtPixel(e.pixel, feature => feature);
                         if (feature && feature.getGeometry().getType() == "Point") {
-                            var cb = callback[events.SHOW_STREET_VIEW];
+                            var cb = this.callback()[events.SHOW_STREET_VIEW];
                             if (cb) cb(feature);
                         }
                     });

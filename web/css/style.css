@@ -6,3 +6,9 @@
     width: 100%;
     height: 100%;
 }
+.no-result {
+    color: #b2b2b2;
+    text-align: center;
+    font-style: italic;
+    font-size: 20px;
+}

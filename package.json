@@ -22,7 +22,6 @@
     "mongoose": "^4.10.5",
     "ol": "^4.1.1",
     "pug": "^2.0.0-rc.1",
-    "pug-loader": "^2.3.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "uikit": "^3.0.0-beta.24"
@@ -32,6 +31,7 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "html-webpack-plugin": "^2.28.0",
+    "pug-loader": "^2.3.0",
     "reload": "^1.1.5",
     "style-loader": "^0.18.1",
     "url-loader": "^0.5.8",
