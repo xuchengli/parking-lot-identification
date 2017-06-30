@@ -24,7 +24,7 @@ var counterSchema = new Schema({
 var Counter = mongoose.model("Counter", counterSchema);
 
 class identification {
-    identifyStreetView(cameraId, streetViewId) {
+    bindStreetView(cameraId, streetViewId) {
         return new Promise((resolve, reject) => {
             var streetViewIdentification = new Identification({
                 camera: cameraId,
@@ -33,6 +33,21 @@ class identification {
             streetViewIdentification.save((err, streetViewIdentification) => {
                 if (err) reject(err);
                 resolve(streetViewIdentification);
+            });
+        });
+    }
+    unbindStreetView(streetViewId) {
+        return new Promise((resolve, reject) => {
+            Identification.findOneAndRemove(
+                { street_view: streetViewId },
+                { select: { _id: 0, camera: 1, parking_lots: 1 } },
+            (err, identification) => {
+                if (err) reject(err);
+                var parkingLots = identification["parking_lots"];
+                resolve({
+                    camera: identification["camera"],
+                    parking_lots: parkingLots.map(parkingLot => parkingLot["_map"])
+                });
             });
         });
     }
@@ -78,9 +93,7 @@ class identification {
                 { $project: { _id: 0, street_view: 1 } },
             (err, streetViews) => {
                 if (err) reject(err);
-                resolve(streetViews.map(streetView => {
-                    return streetView.street_view;
-                }));
+                resolve(streetViews.map(streetView => streetView.street_view));
             });
         });
     }

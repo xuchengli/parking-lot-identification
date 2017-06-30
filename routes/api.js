@@ -103,7 +103,7 @@ router.post("/street-view/:id", (req, res) => {
         var identifications = {};
         var identification = new Identification();
         if (cameraId) {
-            yield identification.identifyStreetView(cameraId, streetViewId);
+            yield identification.bindStreetView(cameraId, streetViewId);
         } else {
             identifications = yield identification.findAll();
         }
@@ -112,6 +112,14 @@ router.post("/street-view/:id", (req, res) => {
     }).catch(err => {
         Object.assign(resp, { success: false });
         res.json(Object.assign(resp, err));
+    });
+});
+router.delete("/street-view/:id", (req, res) => {
+    var identification = new Identification();
+    identification.unbindStreetView(req.params.id).then(result => {
+        res.json(Object.assign({ success: true }, result));
+    }).catch(err => {
+        res.json(Object.assign({ success: false }, err));
     });
 });
 module.exports = router;
