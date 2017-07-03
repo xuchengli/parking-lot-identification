@@ -12,3 +12,6 @@
     font-style: italic;
     font-size: 20px;
 }
+.unbind-button {
+    display: none;
+}

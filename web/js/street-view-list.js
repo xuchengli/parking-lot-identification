@@ -15,16 +15,23 @@ class streetViewList {
             dataType: "json",
             success: data => {
                 if (data.success) {
+                    var $unbindBtn = $(".unbind-button");
                     var dialog = UIkit.modal(template({
                         views: data.views
                     }));
                     dialog.$el.on("click", "tbody button", e => {
                         var streetView = new StreetView();
-                        streetView.on(streetView.events.OPENED, (cameraId, streetViewId) => {
-                            var osm = new Osm();
-                            osm.highlightCamera(cameraId, streetViewId);
+                        streetView.on(streetView.events.SELECT_PARKING_LOT, feature => {
+                            console.log(feature);
+                            console.log(feature.getId());
                         });
-                        streetView.open($(e.target).data("id"), cameraId);
+                        streetView.open($(e.target).data("id"), cameraId).then(result => {
+                            var osm = new Osm();
+                            osm.highlightCamera(result.camera, result.street_view);
+                            $unbindBtn.data("streetViewId", result.street_view).show();
+                        }).catch(err => {
+                            UIkit.notification("<span uk-icon='icon: close'></span> " + err, "danger");
+                        });
                         dialog.hide();
                     }).on("hidden", e => {
                         if (e.target === e.currentTarget) {

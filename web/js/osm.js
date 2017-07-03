@@ -34,7 +34,7 @@ function createCameraStyle(src, img) {
     });
 }
 var highlightedCameraStyle = {};
-function changePixel(img) {
+function changePixel(img, offset) {
     var canvas = $("<canvas>")[0];
     var context = canvas.getContext("2d");
     canvas.width = img.width;
@@ -43,7 +43,7 @@ function changePixel(img) {
     var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     var data = imageData.data;
     for (var i = 0, ii = data.length; i < ii; i = i + 4) {
-        data[i] = 255 - data[i];
+        data[i] = Math.abs(data[i] - offset);
     }
     context.putImageData(imageData, 0, 0);
     return canvas;
@@ -54,14 +54,14 @@ function _highlightCamera(src, img) {
             resolve(highlightedCameraStyle[src]);
         } else {
             if (img) {
-                var canvas = changePixel(img);
+                var canvas = changePixel(img, 255);
                 highlightedCameraStyle[src] = createCameraStyle(undefined, canvas);
                 resolve(highlightedCameraStyle[src]);
             } else {
                 img = new Image;
                 img.crossOrigin = "Anonymous";
                 img.onload = () => {
-                    var canvas = changePixel(img);
+                    var canvas = changePixel(img, 255);
                     highlightedCameraStyle[src] = createCameraStyle(undefined, canvas);
                     resolve(highlightedCameraStyle[src]);
                 };
@@ -70,7 +70,7 @@ function _highlightCamera(src, img) {
         }
     });
 }
-var map;
+var map, select;
 class osm {
     constructor() {
         var _callback = {};
@@ -117,7 +117,8 @@ class osm {
                                     if (property.identification) {
                                         return new Style(Object.assign(_style, {
                                             text: new Text({
-                                                text: property.identification.no,
+                                                text: property.identification.no + "",
+                                                font: "12px Calibri,sans-serif",
                                                 fill: new Fill({ color: "#847574" }),
                                                 stroke: new Stroke({ color: "#fff", width: 3 })
                                             })
@@ -139,7 +140,7 @@ class osm {
                             zoom: data.tileLayer.zoom
                         })
                     });
-                    var select = new Select({
+                    select = new Select({
                         toggleCondition: Condition.never,
                         filter: feature => feature.getGeometry().getType() != "Point"
                     });
@@ -172,15 +173,19 @@ class osm {
             }
         });
     }
-    highlightCamera(cameraId, streetViewId) {
-        var camera = null;
+    getFeatureById(id) {
+        var feature = null;
         var layers = map.getLayers().getArray();
         for (let layer of layers) {
             if (layer instanceof VectorLayer) {
-                camera = layer.getSource().getFeatureById(cameraId);
-                if (camera) break;
+                feature = layer.getSource().getFeatureById(id);
+                if (feature) break;
             }
         }
+        return feature;
+    }
+    highlightCamera(cameraId, streetViewId) {
+        var camera = this.getFeatureById(cameraId);
         if (camera) {
             camera.set("identification", {
                 street_view: {
@@ -190,6 +195,27 @@ class osm {
             var image = camera.getStyle().getImage().getImage();
             _highlightCamera(image.src, image).then(style => camera.setStyle(style));
         }
+    }
+    normalizeCamera(id) {
+        var camera = this.getFeatureById(id);
+        if (camera) {
+            camera.unset("identification", true);
+            var image = camera.getStyle().getImage().getImage();
+            camera.setStyle(createCameraStyle(undefined, changePixel(image, 255)));
+        }
+    }
+    normalizeParkingLot(id) {
+        var parkingLot = this.getFeatureById(id);
+        if (parkingLot) {
+            parkingLot.unset("identification", true);
+            parkingLot.setStyle(new Style({
+                fill: new Fill({ color: "#F7F5F2" }),
+                stroke: new Stroke({ color: "#3399CC" })
+            }));
+        }
+    }
+    clearSelection() {
+        select.getFeatures().clear();
     }
 }
 export default osm;
