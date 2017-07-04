@@ -41,14 +41,15 @@ class identification {
             Identification.findOneAndRemove(
                 { street_view: streetViewId },
                 { select: { _id: 0, camera: 1, parking_lots: 1 } },
-            (err, identification) => {
-                if (err) reject(err);
-                var parkingLots = identification["parking_lots"];
-                resolve({
-                    camera: identification["camera"],
-                    parking_lots: parkingLots.map(parkingLot => parkingLot["_map"])
-                });
-            });
+                (err, identification) => {
+                    if (err) reject(err);
+                    var parkingLots = identification["parking_lots"];
+                    resolve({
+                        camera: identification["camera"],
+                        parking_lots: parkingLots.map(parkingLot => parkingLot["_map"])
+                    });
+                }
+            );
         });
     }
     findAll() {
@@ -91,10 +92,85 @@ class identification {
             Identification.aggregate(
                 { $match: {} },
                 { $project: { _id: 0, street_view: 1 } },
-            (err, streetViews) => {
+                (err, streetViews) => {
+                    if (err) reject(err);
+                    resolve(streetViews.map(streetView => streetView.street_view));
+                }
+            );
+        });
+    }
+    getNextSequence(id) {
+        return new Promise((resolve, reject) => {
+            Counter.findByIdAndUpdate(id, { $inc: { seq: 1 } }, { new: true, upsert: true }, (err, counter) => {
                 if (err) reject(err);
-                resolve(streetViews.map(streetView => streetView.street_view));
+                resolve(counter.seq);
             });
+        });
+    }
+    bindParkingLot(streetViewId, no, _map, _street_view) {
+        return new Promise((resolve, reject) => {
+            Identification.findOneAndUpdate(
+                { street_view: streetViewId },
+                { $push: { parking_lots: { no: no, _map: _map, _street_view: _street_view } } },
+                { new: true, fields: "-_id -__v -parking_lots._id" },
+                (err, identification) => {
+                    if (err) reject(err);
+                    var resp = {};
+                    var parkingLots = identification["parking_lots"];
+                    for (let p of parkingLots) {
+                        if (p["_map"] == _map && p["_street_view"] == _street_view) {
+                            resp["parking_lot_map"] = {
+                                id: p["_map"],
+                                properties: {
+                                    no: p["no"],
+                                    camera: identification["camera"],
+                                    street_view: {
+                                        id: identification["street_view"],
+                                        parking_lot: p["_street_view"]
+                                    }
+                                }
+                            };
+                            resp["parking_lot_street_view"] = {
+                                id: p["_street_view"],
+                                properties: {
+                                    no: p["no"],
+                                    street_view: identification["street_view"],
+                                    osm: {
+                                        camera: identification["camera"],
+                                        parking_lot: p["_map"]
+                                    }
+                                }
+                            };
+                            break;
+                        }
+                    }
+                    resolve(resp);
+                }
+            )
+        });
+    }
+    unbindParkingLot(streetViewId, _map, _street_view) {
+        return new Promise((resolve, reject) => {
+            Identification.findOneAndUpdate(
+                { street_view: streetViewId },
+                { $pull: { parking_lots: { $or: [ { _map: _map }, { _street_view: _street_view } ] } } },
+                { fields: "-_id -__v -parking_lots._id" },
+                (err, identification) => {
+                    if (err) reject(err);
+                    var parkingLots_Map = [], parkingLots_StreetView = [];
+                    var parkingLots = identification["parking_lots"];
+                    for (let p of parkingLots) {
+                        if (p["_map"] == _map || p["_street_view"] == _street_view) {
+                            parkingLots_Map.push(p["_map"]);
+                            parkingLots_StreetView.push(p["_street_view"]);
+                        }
+                    }
+                    resolve({
+                        parking_lots_map: parkingLots_Map,
+                        parking_lots_street_view: parkingLots_StreetView
+                    });
+                }
+            )
         });
     }
 }

@@ -122,4 +122,23 @@ router.delete("/street-view/:id", (req, res) => {
         res.json(Object.assign({ success: false }, err));
     });
 });
+router.put("/street-view/:id", (req, res) => {
+    var resp = {};
+    co(function* () {
+        var _map = req.body._map;
+        var _street_view = req.body._street_view;
+
+        var identification = new Identification();
+        var unbind = yield identification.unbindParkingLot(req.params.id, _map, _street_view);
+
+        var no = yield identification.getNextSequence("identification");
+        var bind = yield identification.bindParkingLot(req.params.id, no, _map, _street_view);
+
+        Object.assign(resp, { success: true });
+        res.json(Object.assign(resp, { unbind: unbind, bind: bind }));
+    }).catch(err => {
+        Object.assign(resp, { success: false });
+        res.json(Object.assign(resp, err));
+    });
+});
 module.exports = router;
