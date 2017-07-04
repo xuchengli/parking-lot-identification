@@ -24,7 +24,7 @@ import Condition from "ol/events/condition";
 const events = Object.freeze({
     SELECT_PARKING_LOT: Symbol("selectParkingLot")
 });
-var map;
+var map, select;
 class streetView {
     constructor() {
         var _callback = {};
@@ -47,10 +47,7 @@ class streetView {
                 dataType: "json",
                 success: data => {
                     if (data.success) {
-                        if (map) {
-                            map.setTarget(null);
-                            map = null;
-                        }
+                        this.destroy();
                         var extent = data.imageLayer.extent;
                         var projection = new Projection({
                             code: "street-view-image",
@@ -108,16 +105,14 @@ class streetView {
                                 maxZoom: 2
                             })
                         });
-                        var select = new Select({
+                        select = new Select({
                             toggleCondition: Condition.never,
                             filter: feature => feature.getGeometry().getType() != "Point"
                         });
                         map.addInteraction(select);
                         select.on("select", e => {
-                            if (e.selected.length) {
-                                let cb = this.callback()[events.SELECT_PARKING_LOT];
-                                if (cb) cb(e.selected[0]);
-                            }
+                            let cb = this.callback()[events.SELECT_PARKING_LOT];
+                            if (cb) cb(e.selected.length ? e.selected[0] : null);
                         });
                         map.on("pointermove", e => {
                             if (e.dragging) return;
@@ -147,10 +142,7 @@ class streetView {
                 dataType: "json",
                 success: data => {
                     if (data.success) {
-                        if (map) {
-                            map.setTarget(null);
-                            map = null;
-                        }
+                        this.destroy();
                         resolve({
                             camera: data.camera,
                             parking_lots: data.parking_lots
@@ -164,6 +156,22 @@ class streetView {
                 }
             });
         });
+    }
+    clearSelection() {
+        select.dispatchEvent({
+            type: "select",
+            selected: [],
+            deselected: select.getFeatures().getArray()
+        });
+        select.getFeatures().clear();
+    }
+    destroy() {
+        if (map) {
+            this.clearSelection();
+            map.removeInteraction(select);
+            map.setTarget(null);
+            map = null;
+        }
     }
 }
 export default streetView;

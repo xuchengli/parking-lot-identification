@@ -16,14 +16,18 @@ class streetViewList {
             success: data => {
                 if (data.success) {
                     var $unbindBtn = $(".unbind-button");
+                    var $parkingLot_StreetView = $("#parkingLot_StreetView");
                     var dialog = UIkit.modal(template({
                         views: data.views
                     }));
                     dialog.$el.on("click", "tbody button", e => {
                         var streetView = new StreetView();
                         streetView.on(streetView.events.SELECT_PARKING_LOT, feature => {
-                            console.log(feature);
-                            console.log(feature.getId());
+                            if (feature) {
+                                $parkingLot_StreetView.text(feature.getId()).trigger("contentChanged");
+                            } else {
+                                $parkingLot_StreetView.empty().trigger("contentChanged");
+                            }
                         });
                         streetView.open($(e.target).data("id"), cameraId).then(result => {
                             var osm = new Osm();

@@ -146,10 +146,8 @@ class osm {
                     });
                     map.addInteraction(select);
                     select.on("select", e => {
-                        if (e.selected.length) {
-                            var cb = this.callback()[events.SELECT_PARKING_LOT];
-                            if (cb) cb(e.selected[0]);
-                        }
+                        var cb = this.callback()[events.SELECT_PARKING_LOT];
+                        if (cb) cb(e.selected.length ? e.selected[0] : null);
                     });
                     map.on("pointermove", e => {
                         if (e.dragging) return;
@@ -215,6 +213,11 @@ class osm {
         }
     }
     clearSelection() {
+        select.dispatchEvent({
+            type: "select",
+            selected: [],
+            deselected: select.getFeatures().getArray()
+        });
         select.getFeatures().clear();
     }
 }

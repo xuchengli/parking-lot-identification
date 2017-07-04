@@ -15,6 +15,10 @@ UIkit.use(Icons);
 
 var osm = new Osm();
 var $unbindBtn = $(".unbind-button");
+var $parkingLot_OSM = $("#parkingLot_OSM");
+var $parkingLot_StreetView = $("#parkingLot_StreetView");
+var $submitBtn = $("#submitBtn");
+$submitBtn.attr("disabled", true);
 
 $unbindBtn.on("click", evt => {
     var $this = $(evt.currentTarget);
@@ -31,13 +35,32 @@ $unbindBtn.on("click", evt => {
         UIkit.notification("<span uk-icon='icon: close'></span> " + err, "danger");
     });
 });
+$parkingLot_OSM.on("contentChanged", evt => {
+    var $this = $(evt.currentTarget);
+    if ($this.text() == "") {
+        $submitBtn.attr("disabled", true);
+    } else if ($parkingLot_StreetView.text() != "") {
+        $submitBtn.attr("disabled", false);
+    }
+});
+$parkingLot_StreetView.on("contentChanged", evt => {
+    var $this = $(evt.currentTarget);
+    if ($this.text() == "") {
+        $submitBtn.attr("disabled", true);
+    } else if ($parkingLot_OSM.text() != "") {
+        $submitBtn.attr("disabled", false);
+    }
+});
 osm.on(osm.events.SHOW_STREET_VIEW, feature => {
     var identification = feature.get("identification");
     if (identification) {
         var streetView = new StreetView();
         streetView.on(streetView.events.SELECT_PARKING_LOT, feature => {
-            console.log(feature);
-            console.log(feature.getId());
+            if (feature) {
+                $parkingLot_StreetView.text(feature.getId()).trigger("contentChanged");
+            } else {
+                $parkingLot_StreetView.empty().trigger("contentChanged");
+            }
         });
         streetView.open(identification.street_view.id).then(result => {
             $unbindBtn.data("streetViewId", result.street_view).show();
@@ -50,7 +73,10 @@ osm.on(osm.events.SHOW_STREET_VIEW, feature => {
     }
 });
 osm.on(osm.events.SELECT_PARKING_LOT, feature => {
-    console.log(feature);
-    console.log(feature.getId());
+    if (feature) {
+        $parkingLot_OSM.text(feature.getId()).trigger("contentChanged");
+    } else {
+        $parkingLot_OSM.empty().trigger("contentChanged");
+    }
 });
 osm.load("20f43f02-5bdf-4e51-b5bc-e34dad373bc8");
