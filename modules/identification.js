@@ -173,5 +173,22 @@ class identification {
             )
         });
     }
+    findParkingLot_Map(_street_view) {
+        return new Promise((resolve, reject) => {
+            Identification.aggregate(
+                { $unwind: "$parking_lots" },
+                { $match: { "parking_lots._street_view": _street_view } },
+                { $project: { _id: 0, "parking_lots._map": 1 } },
+                (err, parkingLots) => {
+                    if (err) reject(err);
+                    var parkingLot_Map = "";
+                    if (parkingLots.length) parkingLot_Map = parkingLots[0]["parking_lots"]["_map"];
+                    resolve({
+                        parking_lot_map: parkingLot_Map
+                    });
+                }
+            );
+        });
+    }
 }
 module.exports = identification;

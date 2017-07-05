@@ -141,4 +141,12 @@ router.put("/street-view/:id", (req, res) => {
         res.json(Object.assign(resp, err));
     });
 });
+router.get("/parking-lot/:_street_view", (req, res) => {
+    var identification = new Identification();
+    identification.findParkingLot_Map(req.params._street_view).then(result => {
+        res.json(Object.assign({ success: true }, result));
+    }).catch(err => {
+        res.json(Object.assign({ success: false }, err));
+    });
+});
 module.exports = router;
