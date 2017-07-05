@@ -205,11 +205,13 @@ class osm {
     normalizeParkingLot(id) {
         var parkingLot = this.getFeatureById(id);
         if (parkingLot) {
-            parkingLot.unset("identification", true);
-            parkingLot.setStyle(new Style({
-                fill: new Fill({ color: "#F7F5F2" }),
-                stroke: new Stroke({ color: "#3399CC" })
-            }));
+            parkingLot.unset("identification");
+        }
+    }
+    highlightParkingLot(id, properties) {
+        var parkingLot = this.getFeatureById(id);
+        if (parkingLot) {
+            parkingLot.set("identification", properties);
         }
     }
     clearSelection() {

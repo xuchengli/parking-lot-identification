@@ -3,11 +3,14 @@
  */
 import $ from "jquery";
 import UIkit from "uikit";
-import Osm from "./osm";
-import StreetView from "./street-view";
 import template from "../templates/street-view-list-modal.pug";
 
+var _osm, _streetView;
 class streetViewList {
+    constructor(osm, streetView) {
+        _osm = osm;
+        _streetView = streetView;
+    }
     show(cameraId) {
         $.ajax({
             type: "GET",
@@ -15,24 +18,13 @@ class streetViewList {
             dataType: "json",
             success: data => {
                 if (data.success) {
-                    var $unbindBtn = $(".unbind-button");
-                    var $parkingLot_StreetView = $("#parkingLot_StreetView");
                     var dialog = UIkit.modal(template({
                         views: data.views
                     }));
                     dialog.$el.on("click", "tbody button", e => {
-                        var streetView = new StreetView();
-                        streetView.on(streetView.events.SELECT_PARKING_LOT, feature => {
-                            if (feature) {
-                                $parkingLot_StreetView.text(feature.getId()).trigger("contentChanged");
-                            } else {
-                                $parkingLot_StreetView.empty().trigger("contentChanged");
-                            }
-                        });
-                        streetView.open($(e.target).data("id"), cameraId).then(result => {
-                            var osm = new Osm();
-                            osm.highlightCamera(result.camera, result.street_view);
-                            $unbindBtn.data("streetViewId", result.street_view).show();
+                        _streetView.open($(e.target).data("id"), cameraId).then(result => {
+                            _osm.highlightCamera(result.camera, result.street_view);
+                            $(".unbind-button").data("streetViewId", result.street_view).show();
                         }).catch(err => {
                             UIkit.notification("<span uk-icon='icon: close'></span> " + err, "danger");
                         });

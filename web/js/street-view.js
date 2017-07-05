@@ -157,6 +157,29 @@ class streetView {
             });
         });
     }
+    getFeatureById(id) {
+        var feature = null;
+        var layers = map.getLayers().getArray();
+        for (let layer of layers) {
+            if (layer instanceof VectorLayer) {
+                feature = layer.getSource().getFeatureById(id);
+                if (feature) break;
+            }
+        }
+        return feature;
+    }
+    normalizeParkingLot(id) {
+        var parkingLot = this.getFeatureById(id);
+        if (parkingLot) {
+            parkingLot.unset("identification");
+        }
+    }
+    highlightParkingLot(id, properties) {
+        var parkingLot = this.getFeatureById(id);
+        if (parkingLot) {
+            parkingLot.set("identification", properties);
+        }
+    }
     clearSelection() {
         select.dispatchEvent({
             type: "select",
