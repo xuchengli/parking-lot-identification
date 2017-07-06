@@ -1,9 +1,11 @@
 /**
  * Created by lixuc on 2017/6/2.
  */
-module.exports = function(app) {
-    app.use("/", require("./dashboard"));
-    app.use("/api", require("./api"));
+var path = require("path");
+
+module.exports = function(app, contextPath) {
+    app.use(contextPath, require("./dashboard"));
+    app.use(path.join(contextPath, "api"), require("./api"));
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.send(err.message);

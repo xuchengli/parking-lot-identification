@@ -85,7 +85,7 @@ $submitBtn.on("click", evt => {
     var parkingLot_StreetView = $parkingLot_StreetView.text();
     $.ajax({
         type: "PUT",
-        url: "/api/street-view/" + streetViewId,
+        url: "api/street-view/" + streetViewId,
         data: {
             _map: parkingLot_Map,
             _street_view: parkingLot_StreetView

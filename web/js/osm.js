@@ -85,7 +85,7 @@ class osm {
     load(id) {
         $.ajax({
             type: "GET",
-            url: "/api/osm/" + id,
+            url: "api/osm/" + id,
             dataType: "json",
             success: data => {
                 if (data.success) {

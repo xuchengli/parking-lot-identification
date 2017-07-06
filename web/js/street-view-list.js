@@ -14,7 +14,7 @@ class streetViewList {
     show(cameraId) {
         $.ajax({
             type: "GET",
-            url: "/api/street-views",
+            url: "api/street-views",
             dataType: "json",
             success: data => {
                 if (data.success) {

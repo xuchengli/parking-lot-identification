@@ -13,7 +13,9 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.locals.env = env;
+app.locals.context = config.Context_Path == "/" ? "" : config.Context_Path;
 
 mongoose.connect(config.mongodb.uri);
 
@@ -33,7 +35,7 @@ if (env == "development") {
     }));
     app.use(webpackHotMiddleware(compiler));
 
-    require("./routes")(app);
+    require("./routes")(app, config.Context_Path);
 
     var reload = require("reload");
     var http = require("http");
@@ -43,8 +45,8 @@ if (env == "development") {
         console.log("Development server started>>>");
     });
 } else {
-    app.use(express.static(path.join(__dirname, "public")));
-    require("./routes")(app);
+    app.use(config.Context_Path, express.static(path.join(__dirname, "public")));
+    require("./routes")(app, config.Context_Path);
     app.listen(8080, function() {
         console.log("Server started>>>");
     });

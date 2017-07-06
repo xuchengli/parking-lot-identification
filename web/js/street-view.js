@@ -40,7 +40,7 @@ class streetView {
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: "POST",
-                url: "/api/street-view/" + streetViewId,
+                url: "api/street-view/" + streetViewId,
                 data: {
                     camera: cameraId
                 },
@@ -138,7 +138,7 @@ class streetView {
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: "DELETE",
-                url: "/api/street-view/" + streetViewId,
+                url: "api/street-view/" + streetViewId,
                 dataType: "json",
                 success: data => {
                     if (data.success) {

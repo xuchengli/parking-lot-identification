@@ -8,5 +8,6 @@ module.exports = {
         //if need to auth, the URI of env is:
         //mongodb://admin:passw0rd@localhost:27017/parking_lots_identification?authMechanism=DEFAULT
         uri: process.env.MongoDB_URI || "mongodb://localhost:27017/parking_lots_identification"
-    }
+    },
+    Context_Path: process.env.Context_Path || "/"
 };
