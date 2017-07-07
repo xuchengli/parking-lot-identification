@@ -1,0 +1,22 @@
+version: "3"
+services:
+  dashboard:
+    build:
+      context: .
+      args:
+        - context=/
+    image: parking-lot-identification
+    container_name: parking-dashboard
+    environment:
+      - EMap_API=http://emap.crl.ibm.com/imd/api/
+      - Street_View_APIKEY=car
+      - MongoDB_URI=mongodb://dashboard_mongo:27017/parking_lots_identification
+    links:
+      - mongodb:dashboard_mongo
+    ports:
+      - "8080:8080"
+  mongodb:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
