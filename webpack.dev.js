@@ -19,6 +19,14 @@ module.exports = {
                 use: ["style-loader", "css-loader"]
             },
             {
+                test: /\.(png|jpg|gif)$/,
+                loader: "file-loader",
+                options: {
+                    name: "[name].[ext]",
+                    outputPath: "images/"
+                }
+            },
+            {
                 test: /\.pug$/,
                 use: "pug-loader"
             }

@@ -4,6 +4,8 @@
 import "uikit/dist/css/uikit.css";
 import "ol/ol.css";
 import "../css/style.css";
+import "../images/en.png";
+import "../images/zh_CN.png";
 import $ from "jquery";
 import UIkit from "uikit";
 import Icons from "uikit/dist/js/uikit-icons";
