@@ -16,10 +16,11 @@ block content
                     .uk-card-body.uk-padding-remove-horizontal.uk-padding-remove-top.uk-padding-small
                         div(uk-grid)
                             .uk-width-1-2
-                                h5 Parking Lot @OSM
+                                h5= __("Parking Lot @OSM")
                                 #parkingLot_OSM.uk-text-small.uk-text-muted
                             .uk-width-1-2
-                                h5 Parking Lot @Street View
+                                h5= __("Parking Lot @Street View")
                                 #parkingLot_StreetView.uk-text-small.uk-text-muted
                     .uk-card-footer.uk-padding-remove-horizontal.uk-padding-remove-bottom
-                        button#submitBtn.uk-button.uk-button-primary.uk-button-small.uk-align-right(disabled) Submit
+                        button#submitBtn.uk-button.uk-button-primary.uk-button-small.uk-align-right(disabled)
+                            = __("Submit")
