@@ -1,18 +1,19 @@
 div(uk-modal)
     .uk-modal-dialog.uk-modal-body
-        h2.uk-modal-title Street View List
+        h2.uk-modal-title.street-view-list-title(data-i18n="street-view-list")
         button.uk-modal-close-default(type="button" uk-close)
         table.uk-table.uk-table-hover.uk-table-divider
             thead
                 tr
-                    th Name
-                    th Action
+                    th.street-view-item-name(data-i18n="street-view-item-name")
+                    th.street-view-item-action(data-i18n="street-view-item-action")
             tbody
                 each view in views
                     tr
                         td= view.name
                         td
-                            button.uk-button.uk-button-primary.uk-button-small(data-id=view.id) Open
+                            button.uk-button.uk-button-primary.uk-button-small(
+                                data-id=view.id data-i18n="street-view-item-open-button")
                 else
                     tr
-                        td.no-result(colspan="2") No result.
+                        td.no-result(colspan="2" data-i18n="street-view-no-item")

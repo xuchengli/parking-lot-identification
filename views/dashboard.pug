@@ -10,17 +10,17 @@ block content
                 .uk-card.uk-card-default.uk-card-body.uk-padding-small.uk-margin-small-bottom
                     .uk-position-small.uk-position-top-right.unbind-button
                         a(uk-icon="icon:close")
-                    h3.uk-card-title.uk-margin-small= __("Street View")
+                    h3.uk-card-title.uk-margin-small.street-view-title(data-i18n="street-view")
                     #streetView
                 .uk-card.uk-card-default.uk-padding-small
                     .uk-card-body.uk-padding-remove-horizontal.uk-padding-remove-top.uk-padding-small
                         div(uk-grid)
                             .uk-width-1-2
-                                h5= __("Parking Lot @OSM")
+                                h5.parking-lot-osm-title(data-i18n="parking-lot-osm")
                                 #parkingLot_OSM.uk-text-small.uk-text-muted
                             .uk-width-1-2
-                                h5= __("Parking Lot @Street View")
+                                h5.parking-lot-street-view-title(data-i18n="parking-lot-street-view")
                                 #parkingLot_StreetView.uk-text-small.uk-text-muted
                     .uk-card-footer.uk-padding-remove-horizontal.uk-padding-remove-bottom
-                        button#submitBtn.uk-button.uk-button-primary.uk-button-small.uk-align-right(disabled)
-                            = __("Submit")
+                        button#submitBtn.uk-button.uk-button-primary.uk-button-small.uk-align-right(
+                            disabled data-i18n="submit-button")

@@ -29,6 +29,12 @@ class streetViewList {
                             UIkit.notification("<span uk-icon='icon: close'></span> " + err, "danger");
                         });
                         dialog.hide();
+                    }).on("show", e=> {
+                        $(".street-view-list-title").localize();
+                        $(".street-view-item-name").localize();
+                        $(".street-view-item-action").localize();
+                        $("tbody button").localize();
+                        $(".no-result").localize();
                     }).on("hidden", e => {
                         if (e.target === e.currentTarget) {
                             dialog.$destroy(true);

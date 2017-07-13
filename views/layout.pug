@@ -2,25 +2,19 @@ doctype html
 html
     head
         base(href=context + "/")
-        title= __("Parking Lot Editor")
+        title(data-i18n="parking-lot-editor")
     body
         nav.uk-navbar-container(uk-navbar)
             .uk-navbar-left
                 .uk-navbar-item
-                    h3.uk-margin-remove-bottom= __("Parking Lot Editor")
+                    h3.uk-margin-remove-bottom.nav-title(data-i18n="parking-lot-editor")
             .uk-navbar-right
                 ul.uk-navbar-nav
                     li
                         a
-                            img(src="/images/en.png" width=24 height=24)
+                            img.locale(width=24 height=24)
                         .uk-navbar-dropdown.uk-width-auto.uk-padding-small.uk-margin-remove
-                            ul.uk-nav.uk-navbar-dropdown-nav
-                                li
-                                    a
-                                        img(src="/images/en.png" width=24 height=24)
-                                li
-                                    a
-                                        img(src="/images/zh_CN.png" width=24 height=24)
+                            ul.uk-nav.uk-navbar-dropdown-nav.locale-list
         block content
         if env == "development"
             script(src="/bundle.js")

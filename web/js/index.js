@@ -4,11 +4,10 @@
 import "uikit/dist/css/uikit.css";
 import "ol/ol.css";
 import "../css/style.css";
-import "../images/en.png";
-import "../images/zh_CN.png";
 import $ from "jquery";
 import UIkit from "uikit";
 import Icons from "uikit/dist/js/uikit-icons";
+import I18n from "./i18n";
 import Osm from "./osm";
 import StreetViewList from "./street-view-list";
 import StreetView from "./street-view";
@@ -19,6 +18,7 @@ var $unbindBtn = $(".unbind-button");
 var $parkingLot_OSM = $("#parkingLot_OSM");
 var $parkingLot_StreetView = $("#parkingLot_StreetView");
 var $submitBtn = $("#submitBtn").attr("disabled", true);
+var i18n = new I18n();
 var osm = new Osm();
 var streetView = new StreetView();
 
@@ -122,4 +122,5 @@ $submitBtn.on("click", evt => {
         }
     });
 });
+i18n.init();
 osm.load("20f43f02-5bdf-4e51-b5bc-e34dad373bc8");
