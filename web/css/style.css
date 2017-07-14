@@ -3,7 +3,7 @@ html {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
 }
-#mapping-section {
+#home-section, #osm-section, #street-view-section, #mapping-section {
     display: none;
 }
 #tiledMap {
@@ -69,4 +69,7 @@ html {
 }
 .uk-dark {
     color: #666;
+}
+.uk-height-xlarge {
+    height: 500px;
 }
