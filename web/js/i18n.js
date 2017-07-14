@@ -21,6 +21,9 @@ let $localeList = $(".locale-list").on("click", "img", evt => {
 let $locale = $(".locale");
 let $title = $("title");
 let $navTitle = $(".nav-title");
+let $parkingLotOSMEntry = $(".osm-entry");
+let $parkingLotSVEntry = $(".street-view-entry");
+let $parkingLotMappingEntry = $(".mapping-entry");
 let $streetViewTitle = $(".street-view-title");
 let $parkingLotOSMTitle = $(".parking-lot-osm-title");
 let $parkingLotSVTitle = $(".parking-lot-street-view-title");
@@ -62,13 +65,12 @@ class i18n {
             }
         }, (err, t) => {
             jqueryI18next.init(i18next, $);
+            this.changeLocaleFlag(i18next.language);
             this.localize();
             i18next.on("languageChanged", lng => {
                 this.changeLocaleFlag(lng);
                 this.localize();
             });
-        }).on("languageChanged", lng => {
-            this.changeLocaleFlag(lng);
         });
     }
     changeLocaleFlag(lng) {
@@ -81,6 +83,9 @@ class i18n {
     localize() {
         $title.localize();
         $navTitle.localize();
+        $parkingLotOSMEntry.localize();
+        $parkingLotSVEntry.localize();
+        $parkingLotMappingEntry.localize();
         $streetViewTitle.localize();
         $parkingLotOSMTitle.localize();
         $parkingLotSVTitle.localize();

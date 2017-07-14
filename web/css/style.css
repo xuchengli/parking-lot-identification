@@ -1,3 +1,8 @@
+html {
+    font-size: 15px;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
 #tiledMap {
     width: 100%;
     height: 500px;
@@ -14,4 +19,51 @@
 }
 .unbind-button {
     display: none;
+}
+.uk-overlay {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    width: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+    -webkit-transform: translateZ(0);
+    margin: 0;
+    padding: 0;
+}
+.uk-overlay-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    color: #fff;
+}
+.uk-overlay-panel > :last-child {
+    margin-bottom: 0;
+}
+.uk-overlay-bottom {
+    top: auto;
+}
+.uk-overlay-transition {
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+    transition-property: opacity, transform;
+}
+.uk-overlay-slide-bottom {
+    opacity: 0;
+    -webkit-transform: translateY(100%);
+    transform: translateY(100%);
+}
+.uk-overlay-slide-top {
+    opacity: 1;
+    -webkit-transform: translateX(0) translateY(0);
+    transform: translateX(0) translateY(0);
+}
+.uk-light {
+    color: rgba(255,255,255,0.8);
+}
+.uk-dark {
+    color: #666;
 }

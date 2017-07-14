@@ -14,6 +14,19 @@ import StreetView from "./street-view";
 
 UIkit.use(Icons);
 
+var $entryCard = $(".entry-card");
+$entryCard.hover(evt => {
+    var $this = $(evt.currentTarget);
+    $this.find(".uk-overlay-panel")
+        .removeClass("uk-overlay-slide-bottom")
+        .addClass("uk-overlay-slide-top uk-overlay-transition");
+}, evt => {
+    var $this = $(evt.currentTarget);
+    $this.find(".uk-overlay-panel")
+        .removeClass("uk-overlay-slide-top")
+        .addClass("uk-overlay-slide-bottom");
+});
+
 var $unbindBtn = $(".unbind-button");
 var $parkingLot_OSM = $("#parkingLot_OSM");
 var $parkingLot_StreetView = $("#parkingLot_StreetView");

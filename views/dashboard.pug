@@ -3,6 +3,23 @@ extends layout
 block content
     .uk-container.uk-margin-medium-top.uk-margin-medium-bottom
         div(uk-grid)
+            .uk-width-1-3.uk-text-center
+                .entry-card.uk-overlay.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
+                    span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: world; ratio: 5")
+                    .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-primary
+                        p.osm-entry.uk-light(data-i18n="edit-parking-lot-osm")
+            .uk-width-1-3.uk-text-center
+                .entry-card.uk-overlay.uk-card-primary.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
+                    span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: image; ratio: 5")
+                    .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-primary
+                        p.street-view-entry.uk-light(data-i18n="edit-parking-lot-street-view")
+            .uk-width-1-3.uk-text-center
+                .entry-card.uk-overlay.uk-card-secondary.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
+                    span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: link; ratio: 5")
+                    .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-default
+                        p.mapping-entry.uk-dark(data-i18n="edit-parking-lot-mapping")
+    .uk-container.uk-margin-medium-top.uk-margin-medium-bottom(hidden)
+        div(uk-grid)
             .uk-width-1-2
                 .uk-card.uk-card-default
                     #tiledMap
