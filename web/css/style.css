@@ -3,6 +3,9 @@ html {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
 }
+#mapping-section {
+    display: none;
+}
 #tiledMap {
     width: 100%;
     height: 500px;

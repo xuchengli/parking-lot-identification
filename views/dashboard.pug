@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    .uk-container.uk-margin-medium-top.uk-margin-medium-bottom
+    #home-section.uk-container.uk-margin-medium-top.uk-margin-medium-bottom
         div(uk-grid)
             .uk-width-1-3.uk-text-center
                 .entry-card.uk-overlay.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
@@ -18,7 +18,7 @@ block content
                     span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: link; ratio: 5")
                     .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-default
                         p.mapping-entry.uk-dark(data-i18n="edit-parking-lot-mapping")
-    .uk-container.uk-margin-medium-top.uk-margin-medium-bottom(hidden)
+    #mapping-section.uk-container.uk-margin-medium-top.uk-margin-medium-bottom
         div(uk-grid)
             .uk-width-1-2
                 .uk-card.uk-card-default
