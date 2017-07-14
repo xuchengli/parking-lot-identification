@@ -89,6 +89,7 @@ class osm {
             dataType: "json",
             success: data => {
                 if (data.success) {
+                    this.destroy();
                     var layers = [
                         new TileLayer({
                             source: new OSM()
@@ -221,6 +222,14 @@ class osm {
             deselected: select.getFeatures().getArray()
         });
         select.getFeatures().clear();
+    }
+    destroy() {
+        if (map) {
+            this.clearSelection();
+            map.removeInteraction(select);
+            map.setTarget(null);
+            map = null;
+        }
     }
 }
 export default osm;

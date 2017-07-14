@@ -7,6 +7,8 @@ This tool is used to create mapping of parking lots between OSM and street view.
 * Map view is supported by [OpenLayers](https://github.com/openlayers/openlayers)
 * Front-end framework is supported by [UIKit](https://github.com/uikit/uikit)
 * DB is supported by [Mongoose](https://github.com/Automattic/mongoose)
+* Internationalization is supported by [i18next](https://github.com/i18next/i18next)
+* Virtual addresses of SPA is supported by [jQuery Address plugin](https://github.com/asual/jquery-address)
 
 ## Installation
 

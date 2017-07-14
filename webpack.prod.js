@@ -57,6 +57,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.ProvidePlugin({ jQuery: "jquery" }),
         new CleanWebpackPlugin(["public"]),
         new ExtractTextPlugin("css/[name].[chunkhash].css"),
         new webpack.optimize.CommonsChunkPlugin({
