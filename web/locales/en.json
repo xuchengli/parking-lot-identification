@@ -1,5 +1,7 @@
 {
   "parking-lot-editor": "Parking Lot Editor",
+  "open-street-map": "Open Street Map",
+  "parking-lots-mapping": "Parking Lots Mapping",
   "edit-parking-lot-osm": "Edit parking lots on open street map",
   "edit-parking-lot-street-view": "Edit parking lots on street view",
   "edit-parking-lot-mapping": "Edit mapping of parking lots between street view and open street map",

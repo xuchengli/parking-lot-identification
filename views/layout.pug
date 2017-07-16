@@ -6,8 +6,22 @@ html
     body
         nav.uk-navbar-container(uk-navbar)
             .uk-navbar-left
-                .uk-navbar-item
-                    h3.uk-margin-remove-bottom.nav-title(data-i18n="parking-lot-editor")
+                a.uk-navbar-item.uk-logo(href="/" rel="address:/")
+                    span.nav-title(data-i18n="parking-lot-editor")
+            .uk-navbar-center.nav-menu
+                ul.uk-navbar-nav
+                    li
+                        a(href="/osm" rel="address:/osm")
+                            span.uk-icon.uk-margin-small-right(uk-icon="icon: world")
+                            span.nav-open-street-map(data-i18n="open-street-map")
+                    li
+                        a(href="/street-view" rel="address:/street-view")
+                            span.uk-icon.uk-margin-small-right(uk-icon="icon: image")
+                            span.nav-street-view(data-i18n="street-view")
+                    li
+                        a(href="/mapping" rel="address:/mapping")
+                            span.uk-icon.uk-margin-small-right(uk-icon="icon: link")
+                            span.nav-parking-lots-mapping(data-i18n="parking-lots-mapping")
             .uk-navbar-right
                 ul.uk-navbar-nav
                     li

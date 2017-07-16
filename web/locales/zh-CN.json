@@ -1,5 +1,7 @@
 {
   "parking-lot-editor": "车位编辑器",
+  "open-street-map": "开放街道地图",
+  "parking-lots-mapping": "车位关联",
   "edit-parking-lot-osm": "编辑开放街道地图上的车位",
   "edit-parking-lot-street-view": "编辑街景上的车位",
   "edit-parking-lot-mapping": "编辑街景和开放街道地图上的车位对应关系",

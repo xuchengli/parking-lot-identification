@@ -13,6 +13,8 @@ import ParkingLotsMapping from "./parking-lots-mapping";
 
 UIkit.use(Icons);
 
+var $navMenu = $(".nav-menu");
+var $menu = $(".nav-menu li");
 var $homeSection = $("#home-section");
 var $osmSection = $("#osm-section");
 var $osmIframe = $("#osm-section iframe");
@@ -25,10 +27,42 @@ var i18n = new I18n();
 i18n.init();
 
 function showSection(name) {
-    name == "home" ? $homeSection.show() : $homeSection.hide();
-    name == "osm" ? $osmSection.show() : $osmSection.hide();
-    name == "streetView" ? $streetViewSection.show() : $streetViewSection.hide();
-    name == "mapping" ? $mappingSection.show() : $mappingSection.hide();
+    switch (name) {
+        case "home":
+            $navMenu.hide();
+            $homeSection.show();
+            $osmSection.hide();
+            $streetViewSection.hide();
+            $mappingSection.hide();
+            break;
+        case "osm":
+            $navMenu.show();
+            $menu.removeClass("uk-active");
+            $($menu[0]).addClass("uk-active");
+            $homeSection.hide();
+            $osmSection.show();
+            $streetViewSection.hide();
+            $mappingSection.hide();
+            break;
+        case "streetView":
+            $navMenu.show();
+            $menu.removeClass("uk-active");
+            $($menu[1]).addClass("uk-active");
+            $homeSection.hide();
+            $osmSection.hide();
+            $streetViewSection.show();
+            $mappingSection.hide();
+            break;
+        case "mapping":
+            $navMenu.show();
+            $menu.removeClass("uk-active");
+            $($menu[2]).addClass("uk-active");
+            $homeSection.hide();
+            $osmSection.hide();
+            $streetViewSection.hide();
+            $mappingSection.show();
+            break;
+    }
 }
 $.address.change(evt => {
     switch (evt.value) {

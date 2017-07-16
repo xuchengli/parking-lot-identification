@@ -21,6 +21,9 @@ let $localeList = $(".locale-list").on("click", "img", evt => {
 let $locale = $(".locale");
 let $title = $("title");
 let $navTitle = $(".nav-title");
+let $navOSM = $(".nav-open-street-map");
+let $navSV = $(".nav-street-view");
+let $navParkingLotsMapping = $(".nav-parking-lots-mapping");
 let $parkingLotOSMEntry = $(".osm-entry");
 let $parkingLotSVEntry = $(".street-view-entry");
 let $parkingLotMappingEntry = $(".mapping-entry");
@@ -83,6 +86,9 @@ class i18n {
     localize() {
         $title.localize();
         $navTitle.localize();
+        $navOSM.localize();
+        $navSV.localize();
+        $navParkingLotsMapping.localize();
         $parkingLotOSMEntry.localize();
         $parkingLotSVEntry.localize();
         $parkingLotMappingEntry.localize();
