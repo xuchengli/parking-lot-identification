@@ -9,18 +9,22 @@ import "jquery-address";
 import UIkit from "uikit";
 import Icons from "uikit/dist/js/uikit-icons";
 import I18n from "./i18n";
+import Navbar from "./navbar";
 import ParkingLotsMapping from "./parking-lots-mapping";
 
 UIkit.use(Icons);
 
-var $navMenu = $(".nav-menu");
-var $menu = $(".nav-menu li");
+var $dashboardContainer = $("#dashboard-container");
+var $wrapperSection = $("#wrapper-section");
+var $loginBtn = $(".wrapper-button");
 var $homeSection = $("#home-section");
 var $osmSection = $("#osm-section");
 var $osmIframe = $("#osm-section iframe");
 var $streetViewSection = $("#street-view-section");
 var $streetViewIframe = $("#street-view-section iframe");
 var $mappingSection = $("#mapping-section");
+
+var navbar = new Navbar();
 var parkingLotsMapping = new ParkingLotsMapping();
 
 var i18n = new I18n();
@@ -28,35 +32,49 @@ i18n.init();
 
 function showSection(name) {
     switch (name) {
+        case "wrapper":
+            $dashboardContainer.addClass("wrapper");
+            navbar.transformTo(name);
+            $wrapperSection.show();
+            $homeSection.hide();
+            $osmSection.hide();
+            $streetViewSection.hide();
+            $mappingSection.hide();
+            break;
         case "home":
-            $navMenu.hide();
+            $dashboardContainer.removeClass("wrapper");
+            navbar.transformTo(name);
+            $wrapperSection.hide();
             $homeSection.show();
             $osmSection.hide();
             $streetViewSection.hide();
             $mappingSection.hide();
             break;
         case "osm":
-            $navMenu.show();
-            $menu.removeClass("uk-active");
-            $($menu[0]).addClass("uk-active");
+            $dashboardContainer.removeClass("wrapper");
+            navbar.transformTo(name);
+            navbar.active(name);
+            $wrapperSection.hide();
             $homeSection.hide();
             $osmSection.show();
             $streetViewSection.hide();
             $mappingSection.hide();
             break;
         case "streetView":
-            $navMenu.show();
-            $menu.removeClass("uk-active");
-            $($menu[1]).addClass("uk-active");
+            $dashboardContainer.removeClass("wrapper");
+            navbar.transformTo(name);
+            navbar.active(name);
+            $wrapperSection.hide();
             $homeSection.hide();
             $osmSection.hide();
             $streetViewSection.show();
             $mappingSection.hide();
             break;
         case "mapping":
-            $navMenu.show();
-            $menu.removeClass("uk-active");
-            $($menu[2]).addClass("uk-active");
+            $dashboardContainer.removeClass("wrapper");
+            navbar.transformTo(name);
+            navbar.active(name);
+            $wrapperSection.hide();
             $homeSection.hide();
             $osmSection.hide();
             $streetViewSection.hide();
@@ -67,6 +85,9 @@ function showSection(name) {
 $.address.change(evt => {
     switch (evt.value) {
         case "/":
+            showSection("wrapper");
+            break;
+        case "/home":
             showSection("home");
             break;
         case "/osm":
@@ -82,6 +103,9 @@ $.address.change(evt => {
             showSection("mapping");
             break;
     }
+});
+$loginBtn.on("click", evt => {
+    $.address.value("/home");
 });
 var $entryCard = $(".entry-card");
 $entryCard.hover(evt => {

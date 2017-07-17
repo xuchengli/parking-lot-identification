@@ -2,33 +2,8 @@ doctype html
 html
     head
         base(href=context + "/")
-        title(data-i18n="parking-lot-editor")
-    body
-        nav.uk-navbar-container(uk-navbar)
-            .uk-navbar-left
-                a.uk-navbar-item.uk-logo(href="/" rel="address:/")
-                    span.nav-title(data-i18n="parking-lot-editor")
-            .uk-navbar-center.nav-menu
-                ul.uk-navbar-nav
-                    li
-                        a(href="/osm" rel="address:/osm")
-                            span.uk-icon.uk-margin-small-right(uk-icon="icon: world")
-                            span.nav-open-street-map(data-i18n="open-street-map")
-                    li
-                        a(href="/street-view" rel="address:/street-view")
-                            span.uk-icon.uk-margin-small-right(uk-icon="icon: image")
-                            span.nav-street-view(data-i18n="street-view")
-                    li
-                        a(href="/mapping" rel="address:/mapping")
-                            span.uk-icon.uk-margin-small-right(uk-icon="icon: link")
-                            span.nav-parking-lots-mapping(data-i18n="parking-lots-mapping")
-            .uk-navbar-right
-                ul.uk-navbar-nav
-                    li
-                        a
-                            img.locale(width=24 height=24)
-                        .uk-navbar-dropdown.uk-width-auto.uk-padding-small.uk-margin-remove
-                            ul.uk-nav.uk-navbar-dropdown-nav.locale-list
+        title(data-i18n="parking-lot-management")
+    body.uk-height-viewport
         block content
         if env == "development"
             script(src="/bundle.js")

@@ -20,7 +20,11 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif|eot|svg|ttf|woff|woff2)$/,
-                use: "url-loader"
+                loader: "url-loader",
+                options: {
+                    name: "[hash:6].[ext]",
+                    limit: 10000
+                }
             },
             {
                 test: /\.pug$/,

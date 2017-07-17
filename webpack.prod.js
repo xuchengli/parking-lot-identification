@@ -15,7 +15,7 @@ module.exports = {
     entry: "./web/js/index.js",
     output: {
         path: path.join(__dirname, "public"),
-        filename: "js/[name].[chunkhash].js"
+        filename: "[name].[chunkhash].js"
     },
     module: {
         rules: [
@@ -48,7 +48,11 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif|eot|svg|ttf|woff|woff2)$/,
-                use: "url-loader"
+                loader: "url-loader",
+                options: {
+                    name: "[hash:6].[ext]",
+                    limit: 10000
+                }
             },
             {
                 test: /\.pug$/,
@@ -59,7 +63,7 @@ module.exports = {
     plugins: [
         new webpack.ProvidePlugin({ jQuery: "jquery" }),
         new CleanWebpackPlugin(["public"]),
-        new ExtractTextPlugin("css/[name].[chunkhash].css"),
+        new ExtractTextPlugin("[name].[chunkhash].css"),
         new webpack.optimize.CommonsChunkPlugin({
             name: "vendor",
             minChunks: function (module) {

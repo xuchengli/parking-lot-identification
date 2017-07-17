@@ -20,6 +20,8 @@ let $localeList = $(".locale-list").on("click", "img", evt => {
 });
 let $locale = $(".locale");
 let $title = $("title");
+let $wrapperTitle = $(".wrapper-title");
+let $loginBtn = $(".wrapper-button");
 let $navTitle = $(".nav-title");
 let $navOSM = $(".nav-open-street-map");
 let $navSV = $(".nav-street-view");
@@ -85,6 +87,8 @@ class i18n {
     }
     localize() {
         $title.localize();
+        $wrapperTitle.localize();
+        $loginBtn.localize();
         $navTitle.localize();
         $navOSM.localize();
         $navSV.localize();

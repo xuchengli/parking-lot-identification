@@ -1,49 +1,79 @@
 extends layout
 
 block content
-    #home-section.uk-container.uk-margin-medium-top.uk-margin-medium-bottom
-        div(uk-grid)
-            .uk-width-1-3.uk-text-center
-                .entry-card.uk-overlay.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
-                    span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: world; ratio: 5")
-                    .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-primary
-                        p.osm-entry.uk-light(data-i18n="edit-parking-lot-osm")
-            .uk-width-1-3.uk-text-center
-                .entry-card.uk-overlay.uk-card-primary.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
-                    span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: image; ratio: 5")
-                    .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-primary
-                        p.street-view-entry.uk-light(data-i18n="edit-parking-lot-street-view")
-            .uk-width-1-3.uk-text-center
-                .entry-card.uk-overlay.uk-card-secondary.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
-                    span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: link; ratio: 5")
-                    .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-default
-                        p.mapping-entry.uk-dark(data-i18n="edit-parking-lot-mapping")
-    #osm-section.uk-container.uk-container-expand.uk-padding-remove
-        .uk-cover-container.uk-height-xlarge
-            iframe(src="#" width="100%" height="100%" frameborder="0")
-    #street-view-section.uk-container.uk-container-expand.uk-padding-remove
-        .uk-cover-container.uk-height-xlarge
-            iframe(src="#" width="100%" height="100%" frameborder="0")
-    #mapping-section.uk-container.uk-margin-medium-top.uk-margin-medium-bottom
-        div(uk-grid)
-            .uk-width-1-2
-                .uk-card.uk-card-default
-                    #tiledMap
-            .uk-width-1-2
-                .uk-card.uk-card-default.uk-card-body.uk-padding-small.uk-margin-small-bottom
-                    .uk-position-small.uk-position-top-right.unbind-button
-                        a(uk-icon="icon:close")
-                    h3.uk-card-title.uk-margin-small.street-view-title(data-i18n="street-view")
-                    #streetView
-                .uk-card.uk-card-default.uk-padding-small
-                    .uk-card-body.uk-padding-remove-horizontal.uk-padding-remove-top.uk-padding-small
-                        div(uk-grid)
-                            .uk-width-1-2
-                                h5.parking-lot-osm-title(data-i18n="parking-lot-osm")
-                                #parkingLot_OSM.uk-text-small.uk-text-muted
-                            .uk-width-1-2
-                                h5.parking-lot-street-view-title(data-i18n="parking-lot-street-view")
-                                #parkingLot_StreetView.uk-text-small.uk-text-muted
-                    .uk-card-footer.uk-padding-remove-horizontal.uk-padding-remove-bottom
-                        button#submitBtn.uk-button.uk-button-primary.uk-button-small.uk-align-right(
-                            disabled data-i18n="submit-button")
+    #dashboard-container
+        nav.uk-navbar-container.uk-navbar-transparent(uk-navbar)
+            .uk-navbar-left.nav-header
+                a.uk-navbar-item.uk-logo(href="/" rel="address:/")
+                    span.nav-title(data-i18n="parking-lot-management")
+            .uk-navbar-center.nav-menu
+                ul.uk-navbar-nav
+                    li
+                        a(href="/osm" rel="address:/osm")
+                            span.uk-icon.uk-margin-small-right(uk-icon="icon: world")
+                            span.nav-open-street-map(data-i18n="open-street-map")
+                    li
+                        a(href="/street-view" rel="address:/street-view")
+                            span.uk-icon.uk-margin-small-right(uk-icon="icon: image")
+                            span.nav-street-view(data-i18n="street-view")
+                    li
+                        a(href="/mapping" rel="address:/mapping")
+                            span.uk-icon.uk-margin-small-right(uk-icon="icon: link")
+                            span.nav-parking-lots-mapping(data-i18n="parking-lots-mapping")
+            .uk-navbar-right
+                ul.uk-navbar-nav
+                    li
+                        a
+                            img.locale(width=24 height=24)
+                        .uk-navbar-dropdown.uk-width-auto.uk-padding-small.uk-margin-remove
+                            ul.uk-nav.uk-navbar-dropdown-nav.locale-list
+        #wrapper-section.wrapper-box
+            .wrapper-title
+                label(data-i18n="parking-lot-management")
+            button.wrapper-button(data-i18n="login-button")
+        #home-section.uk-container.uk-margin-medium-top.uk-margin-medium-bottom
+            div(uk-grid)
+                .uk-width-1-3.uk-text-center
+                    .entry-card.uk-overlay.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
+                        span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: world; ratio: 5")
+                        .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-primary
+                            p.osm-entry.uk-light(data-i18n="edit-parking-lot-osm")
+                .uk-width-1-3.uk-text-center
+                    .entry-card.uk-overlay.uk-card-primary.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
+                        span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: image; ratio: 5")
+                        .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-primary
+                            p.street-view-entry.uk-light(data-i18n="edit-parking-lot-street-view")
+                .uk-width-1-3.uk-text-center
+                    .entry-card.uk-overlay.uk-card-secondary.uk-box-shadow-xlarge.uk-box-shadow-hover-medium
+                        span.uk-margin-large-top.uk-margin-large-bottom(uk-icon="icon: link; ratio: 5")
+                        .uk-overlay-panel.uk-overlay-bottom.uk-overlay-slide-bottom.uk-overlay-default
+                            p.mapping-entry.uk-dark(data-i18n="edit-parking-lot-mapping")
+        #osm-section.uk-container.uk-container-expand.uk-padding-remove
+            .uk-cover-container.uk-height-xlarge
+                iframe(src="#" width="100%" height="100%" frameborder="0")
+        #street-view-section.uk-container.uk-container-expand.uk-padding-remove
+            .uk-cover-container.uk-height-xlarge
+                iframe(src="#" width="100%" height="100%" frameborder="0")
+        #mapping-section.uk-container.uk-margin-medium-bottom
+            div(uk-grid)
+                .uk-width-1-2
+                    .uk-card.uk-card-default
+                        #tiledMap
+                .uk-width-1-2
+                    .uk-card.uk-card-default.uk-card-body.uk-padding-small.uk-margin-small-bottom
+                        .uk-position-small.uk-position-top-right.unbind-button
+                            a(uk-icon="icon:close")
+                        h3.uk-card-title.uk-margin-small.street-view-title(data-i18n="street-view")
+                        #streetView
+                    .uk-card.uk-card-default.uk-padding-small
+                        .uk-card-body.uk-padding-remove-horizontal.uk-padding-remove-top.uk-padding-small
+                            div(uk-grid)
+                                .uk-width-1-2
+                                    h5.parking-lot-osm-title(data-i18n="parking-lot-osm")
+                                    #parkingLot_OSM.uk-text-small.uk-text-muted
+                                .uk-width-1-2
+                                    h5.parking-lot-street-view-title(data-i18n="parking-lot-street-view")
+                                    #parkingLot_StreetView.uk-text-small.uk-text-muted
+                        .uk-card-footer.uk-padding-remove-horizontal.uk-padding-remove-bottom
+                            button#submitBtn.uk-button.uk-button-primary.uk-button-small.uk-align-right(
+                                disabled data-i18n="submit-button")
